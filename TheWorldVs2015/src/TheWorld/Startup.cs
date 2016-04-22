@@ -2,7 +2,9 @@
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
+using TheWorld.Models;
 using TheWorld.Services;
 
 namespace TheWorld
@@ -25,8 +27,10 @@ namespace TheWorld
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, WorldContextSeedData seeder, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddDebug(LogLevel.Warning);
+            //loggerFactory.AddDebug(LogLevel.Information); // mostra queries EntityFramework
             //app.UseDefaultFiles(); // to call index.html
             app.UseStaticFiles();
             app.UseMvc(config =>
@@ -37,6 +41,8 @@ namespace TheWorld
                     defaults: new { controller = "App", action = "Index" }
                     );
             });
+
+            seeder.EnsureSeedData();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -44,6 +50,18 @@ namespace TheWorld
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddLogging();
+            services.AddEntityFramework()
+                .AddSqlServer()
+                .AddDbContext<WorldContext>();
+
+            // AddTransient para garantis que é instanciado, por isso
+            // não se usa AddScoped que também funcionava
+            services.AddTransient<WorldContextSeedData>();
+
+            // AddScoped porque assim a instância de WorldRepository acontece
+            // uma vez por pedido
+            services.AddScoped<IWorldRepository, WorldRepository>();
 
 #if DEBUG
             services.AddScoped<IMailService, DebugMailService>();
