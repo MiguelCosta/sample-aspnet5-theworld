@@ -75,6 +75,7 @@ namespace TheWorld
             // AddScoped porque assim a instância de WorldRepository acontece
             // uma vez por pedido
             services.AddScoped<IWorldRepository, WorldRepository>();
+            services.AddScoped<CoordService>();
 
 #if DEBUG
             services.AddScoped<IMailService, DebugMailService>();

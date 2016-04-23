@@ -24,6 +24,7 @@ namespace TheWorld.Models
 
             newStop.Order = trip.Stops.Any() ?
                               trip.Stops.Max(s => s.Order) + 1 : 1;
+            trip.Stops.Add(newStop);
             _context.Add(newStop);
         }
 
