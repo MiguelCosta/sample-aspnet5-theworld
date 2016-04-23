@@ -1,19 +1,21 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace TheWorld.ViewModels
 {
-    public class TripViewModel
+    public class StopViewModel
     {
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        [Required]
+        public DateTime Arrival { get; set; }
 
         public int Id { get; set; }
+
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
 
         [Required]
         [StringLength(255, MinimumLength = 5)]
         public string Name { get; set; }
-
-        public IEnumerable<StopViewModel> Stops { get; set; }
     }
 }
