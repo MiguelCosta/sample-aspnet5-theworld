@@ -235,3 +235,6 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 /TheWorldVs2015/src/TheWorld/wwwroot/lib
+/TheWorldVs2015/DesktopPublish
+/TheWorldVs2015/DesktopPublishDnu
+/TheWorldVs2015/DesktopPublishDnuVersion
